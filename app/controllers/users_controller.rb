@@ -1,14 +1,13 @@
 class UsersController < ApplicationController
-  before_action  only: [:show, :update, :destroy]
 
   # GET /users
-  def index
-    @users = User.all
+  # def index
+  #   @users = User.all
 
-    render json: @usersra
-  end
+  #   render json: @usersra
+  # end
 
-  # GET /users/1
+  # GET /users?email=junaid@evercam.io
   def show
     user = User.find_by(email: params[:email])
     render :json => user.as_json 
@@ -16,10 +15,15 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    @user = User.new(
+      first_name: params[:first_name],
+      last_name: params[:last_name],
+      email: params[:email],
+      password: params[:password]
+      )
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -39,12 +43,12 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
+  # private
+  #   # Use callbacks to share common setup or constraints between actions.
 
 
-    # Only allow a trusted parameter "white list" through.
-    def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :password)
-    end
+  #   # Only allow a trusted parameter "white list" through.
+  #   def user_params
+  #     params.require(:user).permit(:first_name, :last_name, :email, :password)
+  #   end
 end
